@@ -1,0 +1,40 @@
+# Binaries for programs and plugins
+*.exe
+*.darwin
+*.linux
+*.windows
+
+# Test binary, generated with `go test -c`
+*.test
+
+# Output of `go build`
+*.out
+
+# Dependency directories (golang specific)
+vendor/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# IDE and editor specific files
+.idea/
+.vscode/
+*.sublime-workspace
+*.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Database files (if applicable)
+*.db
+*.sqlite3
+
+# Build artifacts
+build/
+dist/
+
+# Temporary files
+tmp/
