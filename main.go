@@ -33,6 +33,9 @@ func main() {
 	auth.POST("/sign-in", func(c *gin.Context) {
 		handlers.SignInHandler(c.Writer, c.Request)
 	})
+	auth.POST("/sign-out", middleware.RequireAuthorize, func(c *gin.Context) {
+		handlers.SignOutHandler(c.Writer, c.Request)
+	})
 	auth.GET("/me", middleware.RequireAuthorize, func(c *gin.Context) {
 		handlers.AuthMeHandler(c.Writer, c.Request)
 	})

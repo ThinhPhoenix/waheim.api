@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"waheim.api/configs"
 	"waheim.api/services"
@@ -46,6 +47,19 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
+}
+
+func SignOutHandler(w http.ResponseWriter, r *http.Request) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "token",
+		Value:    "",
+		Path:     "/",
+		Expires:  time.Unix(0, 0),
+		HttpOnly: true,
+		Secure:   r.URL.Scheme == "https" || r.TLS != nil,
+		SameSite: http.SameSiteLaxMode,
+	})
+	w.WriteHeader(http.StatusOK)
 }
 
 func AuthMeHandler(w http.ResponseWriter, r *http.Request) {

@@ -14,4 +14,5 @@ type User struct {
 	DeletedAt sql.NullString `db:"deleted_at" json:"deleted_at"`
 	IsActive  bool           `db:"is_active" json:"is_active"`
 	Role      string         `db:"role" json:"role"`
+	Avatar    string         `db:"avatar" json:"avatar"`
 }
