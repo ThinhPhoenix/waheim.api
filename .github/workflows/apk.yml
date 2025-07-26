@@ -1,0 +1,44 @@
+name: Convert build files to APK and upload to Github Artifacts
+on:
+  repository_dispatch:
+    types: [build-apk]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - run: npm install
+      - run: npm run build
+
+      - name: Get Web URL
+        id: geturl
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "::set-output name=weburl::${{ github.event.client_payload.url }}"
+          else
+            echo "::set-output name=weburl::https://your-default-pwa-url.com"
+          fi
+
+      - uses: darkshredder/web-to-app-action@main
+        with:
+          build-folder-path: "build"
+          app-name: "Your-App-Name"
+          output-folder-path: "my-apks"
+          url: ${{ steps.geturl.outputs.weburl }}
+
+      - name: "Upload Artifact"
+        uses: actions/upload-artifact@v2
+        with:
+          name: Final-apks
+          path: my-apks/

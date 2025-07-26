@@ -32,7 +32,7 @@ func GenerateJwt(userId string, role string) (string, error) {
 func ValidateJwt(tokenString string) (jwt.MapClaims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("Unexpected signing method")
+			return nil, errors.New("unexpected signing method")
 		}
 		return []byte(JwtSecret), nil
 	})
@@ -42,5 +42,5 @@ func ValidateJwt(tokenString string) (jwt.MapClaims, error) {
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		return claims, nil
 	}
-	return nil, errors.New("Invalid token")
+	return nil, errors.New("invalid token")
 }
