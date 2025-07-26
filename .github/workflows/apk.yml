@@ -1,4 +1,4 @@
-name: apk 🤖
+name: apk 🕊️
 on:
   repository_dispatch:
     types: [build-apk]
