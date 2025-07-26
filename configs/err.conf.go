@@ -10,6 +10,7 @@ const (
 	ErrorCode_MISSING_REQUIRED_FIELDS    ErrorCode = 1001
 	ErrorCode_USER_ALREADY_EXISTS        ErrorCode = 1002
 	ErrorCode_USER_NOT_FOUND             ErrorCode = 1003
+	ErrorCode_APP_NOT_FOUND              ErrorCode = 2001
 	ErrorCode_USER_NOT_ACTIVE            ErrorCode = 1004
 	ErrorCode_AUTH_FAILED                ErrorCode = 1005
 	ErrorCode_INVALID_TOKEN              ErrorCode = 1006
@@ -33,6 +34,7 @@ var errorMessages = map[ErrorCode]string{
 	ErrorCode_MISSING_REQUIRED_FIELDS:    "MISSING_REQUIRED_FIELDS",
 	ErrorCode_USER_ALREADY_EXISTS:        "USER_ALREADY_EXISTS",
 	ErrorCode_USER_NOT_FOUND:             "USER_NOT_FOUND",
+	ErrorCode_APP_NOT_FOUND:              "APP_NOT_FOUND",
 	ErrorCode_USER_NOT_ACTIVE:            "USER_NOT_ACTIVE",
 	ErrorCode_AUTH_FAILED:                "AUTH_FAILED",
 	ErrorCode_INVALID_TOKEN:              "INVALID_TOKEN",

@@ -267,6 +267,124 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "App Management",
+      "item": [
+        {
+          "name": "Get All Apps",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/app/",
+              "host": ["{{base_url}}"],
+              "path": ["app", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get App By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/app/{{app_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["app", "{{app_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create App",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My App\",\n  \"description\": \"A cool app\",\n  \"status\": \"active\",\n  \"uri\": \"https://myapp.com\",\n  \"icon\": \"https://myapp.com/icon.png\",\n  \"category\": \"productivity\",\n  \"screenshots\": [\"https://myapp.com/ss1.png\", \"https://myapp.com/ss2.png\"],\n  \"tags\": [\"work\", \"focus\"],\n  \"rating\": 0,\n  \"downloads\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/app/",
+              "host": ["{{base_url}}"],
+              "path": ["app", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update App",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My App Updated\",\n  \"description\": \"Updated description\",\n  \"status\": \"inactive\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/app/{{app_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["app", "{{app_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete App",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/app/{{app_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["app", "{{app_id}}"]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
