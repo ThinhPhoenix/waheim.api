@@ -1,88 +1,272 @@
 {
   "info": {
     "name": "Waheim API",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "version": "1.0.0"
+    "description": "API collection for Waheim application with authentication and user management",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{auth_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "auth_token",
+      "value": "",
+      "type": "string"
+    }
+  ],
   "item": [
     {
-      "name": "Ping",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "http://localhost:8080/ping",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["ping"]
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Ping",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ping",
+              "host": ["{{base_url}}"],
+              "path": ["ping"]
+            }
+          },
+          "response": []
         }
-      }
+      ]
     },
     {
-      "name": "Sign Up",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"username\": \"testuser\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"0123456789\",\n  \"password\": \"123456\",\n  \"address\": \"Hanoi\"\n}"
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Sign Up",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password123\",\n  \"email\": \"test@example.com\",\n  \"phone\": \"+84123456789\",\n  \"address\": \"123 Main St, Ho Chi Minh City\",\n  \"role\": \"user\",\n  \"avatar\": \"https://example.com/avatar.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/sign-up",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "sign-up"]
+            }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:8080/auth/sign-up",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["auth", "sign-up"]
-        }
-      }
-    },
-    {
-      "name": "Sign In",
-      "request": {
-        "method": "POST",
-        "header": [
-          {
-            "key": "Content-Type",
-            "value": "application/json"
-          }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"123456\"\n}"
+        {
+          "name": "Sign In",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Extract token from response and set as environment variable",
+                  "if (pm.response.code === 200) {",
+                  "    const responseJson = pm.response.json();",
+                  "    if (responseJson.token) {",
+                  "        pm.collectionVariables.set('auth_token', responseJson.token);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/sign-in",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "sign-in"]
+            }
+          },
+          "response": []
         },
-        "url": {
-          "raw": "http://localhost:8080/auth/sign-in",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["auth", "sign-in"]
+        {
+          "name": "Sign Out",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/sign-out",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "sign-out"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Current User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            }
+          },
+          "response": []
         }
-      }
+      ]
     },
     {
-      "name": "Auth Me",
-      "request": {
-        "method": "GET",
-        "header": [
-          {
-            "key": "Authorization",
-            "value": "Bearer <token>"
-          }
-        ],
-        "url": {
-          "raw": "http://localhost:8080/auth/me",
-          "protocol": "http",
-          "host": ["localhost"],
-          "port": "8080",
-          "path": ["auth", "me"]
+      "name": "User Management (Admin Only)",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user/",
+              "host": ["{{base_url}}"],
+              "path": ["user", ""]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["user", "{{user_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"updateduser\",\n  \"email\": \"updated@example.com\",\n  \"phone\": \"+84987654321\",\n  \"address\": \"456 Updated St, Ho Chi Minh City\",\n  \"role\": \"user\",\n  \"is_active\": true,\n  \"avatar\": \"https://example.com/new_avatar.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/user/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["user", "{{user_id}}"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{auth_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/user/{{user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["user", "{{user_id}}"]
+            }
+          },
+          "response": []
         }
-      }
+      ]
     }
   ]
 }

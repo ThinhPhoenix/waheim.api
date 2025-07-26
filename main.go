@@ -33,11 +33,15 @@ func main() {
 	auth.POST("/sign-in", func(c *gin.Context) {
 		handlers.SignInHandler(c.Writer, c.Request)
 	})
-	auth.POST("/sign-out", middleware.RequireAuthorize, func(c *gin.Context) {
+	auth.POST("/sign-out", middleware.RequireAuthorize(), func(c *gin.Context) {
 		handlers.SignOutHandler(c.Writer, c.Request)
 	})
-	auth.GET("/me", middleware.RequireAuthorize, func(c *gin.Context) {
+	auth.GET("/me", middleware.RequireAuthorize(), func(c *gin.Context) {
 		handlers.AuthMeHandler(c.Writer, c.Request)
 	})
+	user := r.Group("/user")
+	user.GET("/:id", middleware.RequireAuthorize("admin"), handlers.GinToHTTPHandler(handlers.GetUserByIdHandler))
+	user.PUT("/:id", middleware.RequireAuthorize("user","admin"), handlers.GinToHTTPHandler(handlers.UpdateUserHandler))
+	user.DELETE(":id", middleware.RequireAuthorize("user","admin"), handlers.GinToHTTPHandler(handlers.DeleteUserHandler))
 	r.Run()
 }
